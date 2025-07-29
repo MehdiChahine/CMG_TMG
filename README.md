@@ -19,31 +19,13 @@ Mehdi AMROUCHE, Hervé CARFANTAN and Jérôme IDIER
 (c) Environment: Matlab (version 8 or more recent versions).
 
 (d) Major component description:
-    --- Major parts of the algorithm are divided into different Matlab scripts in the /Samplers directory:
-        * init_PCGS.m initializes the variables of the PCGS sampler
-        * sample_q_w.m joint sampling of (q,w) from the marginalized posterior following the RJMCMC framework
-        * sample_x.m joint sampling of vector x (multidimensional Gaussian)
-        * sample_h.m sampling of the parameter related to the impulse response (not used in the default setting)
-        * sample_hyp.m sampling the hyper-parameters lambda (probability of having q_k =1) and sigma2k (the noise variance)
+    --- The directory is three folds
+        * SPX_example.m provides an example of sampling a TMG in the case of Single Type Constrains (STC) only. The illustrative example is the unit simplex.
+        * BOX_example.m provides an example of sampling a TMG in the case of Box Type Constrains (BTC) only. The illustrative example is the unit ell_1 ball.
+        * TMG_example.m provides an exmaple of sampling a TMG in the case of mixed STC and BTC constraints.
 
-    --- Test program:
-        * PCGS_BGM_S.m Sparse deconvolution problem using Bernoulli-Laplace prior, as described in section V-B of the corresponding paper.
+    --- Functions:
+        * STC_CMG_TMG.m function that provides TMG samples in the case of Single Type Constrains (STC) only.
+        * BTX_CMG_TMG.m function that provides TMG samples in the case of Box Type Constrains (BTC) only.
+        * CMG_TMG.m     function that provides TMG samples in the case of mixed STC and BTC constraints.
 
-(e) Detailed run instructions:
-    Run PCGS_BGM_S.m calling
-
-    > PCGS_BGM_S
-
-    in Matlab.
-
-(f) Output description:
-    --- figure(1) & Data.pdf file show the observed data and the impulse response 
-    --- figure(2) & qPM file show the posterior mean of Bernoulli variables q in comparison to the ground truth
-    --- figure(3) & Estimation.pdf file show the estimation of the sparse signal x in comparison to the ground truth
-    --- figure(4) & NoiseVarianceHistogram.pdf file show the histogram of the noise variance (hyper-parameter)
-    --- figure(5) & LambdaHistogram.pdf file show the histogram of the hyper-parameter lambda, i.e., the probability of having q == 1
-    --- figure(6) & ScaleHistogram.pdf file show the histogram of the scale hyper-parameter
-
-(g) External materials:
-    This MATLAB implementation uses the external function "rtnorm.m":
-    --- "rtnorm.m" is a MATLAB function (under GNU/GPL license) developed by Vincent Mazet (ICube, CNRS/Université de Strasbourg)) which allows efficient sampling of random variables from a truncated Gaussian distribution
