@@ -19,6 +19,7 @@ Mehdi AMROUCHE, Hervé CARFANTAN and Jérôme IDIER
 (c) Environment: Matlab (version 8 or more recent versions).
 
 (d) Major component description:
+
     --- The directory is three folds
         * SPX_example.m provides an example of sampling a TMG in the case of Single Type Constrains (STC) only. The illustrative example is the unit simplex.
         * BOX_example.m provides an example of sampling a TMG in the case of Box Type Constrains (BTC) only. The illustrative example is the unit ell_1 ball.
