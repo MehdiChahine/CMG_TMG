@@ -20,12 +20,12 @@ Mehdi AMROUCHE, Hervé CARFANTAN and Jérôme IDIER
 
 (d) Major component description:
 
-    --- The directory is three folds
+    --- The directory provides three example scripts
         * SPX_example.m provides an example of sampling a TMG in the case of Single Type Constrains (STC) only. The illustrative example is the unit simplex.
         * BOX_example.m provides an example of sampling a TMG in the case of Box Type Constrains (BTC) only. The illustrative example is the unit ell_1 ball.
         * TMG_example.m provides an exmaple of sampling a TMG in the case of mixed STC and BTC constraints.
 
-    --- Functions:
+    --- And three functions to sample from TMGs
         * STC_CMG_TMG.m function that provides TMG samples in the case of Single Type Constrains (STC) only.
         * BTX_CMG_TMG.m function that provides TMG samples in the case of Box Type Constrains (BTC) only.
         * CMG_TMG.m     function that provides TMG samples in the case of mixed STC and BTC constraints.
