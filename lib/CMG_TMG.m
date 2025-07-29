@@ -1,4 +1,4 @@
-function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
+function X = CMG_TMG(Q,mu,R0,c0,R1,c1,d1,Tc,Tbin)
 %CMG_TMG_STC generates samples distributed according to a Truncated
 %Multivariate Gaussian (TMG) restricted by linear inqualities (c <= Rx) as defined in eq (1)
 %of the paper "A Continuous Gaussian Mixture Approach to Sample
@@ -20,56 +20,78 @@ function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
 %% Main Code
     % Get size variables
     T = Tbin + Tc;
-    [M,N] = size(R);
+    [M0,N] = size(R0);
+
+    [M1,N] = size(R1);
 
     % Mean shift
-    c = c -R*mu;
-
-    % Compute A and b
-    A = R';
-    b = c;
+    c0 = c0 -R0*mu; 
+    c1 = c1 -R1*mu; 
+    d1 = d1 -R1*mu; 
+    
+    Delta = diag(1./(d1-c1));
+    
+    DR1 = (Delta*R1);
+    Dc1 = Delta*c1;
 
     % Intialize scale parameter s
     s = 1/N;
     
     % Initialize variables
-    W = zeros(M,1);
+    W = zeros(M0,1);
+    V = zeros(M1,1);
+    
     X = zeros(N,T);
     STOP = 0; ACC = 0; t = 1; 
     ind = [];
     NPID = 50;ACCPID = 0;
 
     %% Gibbs Sampler Initialization
-    X_ = (1/N)*ones(N,1)-1/N^2;
+    % Initialization
+    X_ = zeros(N,1);
     X(:,1) = (X_ - mu);
-    U = A'*X(:,1) - b;
+    Uw = R0*X(:,t) - c0;
+    Uv = DR1*X(:,t) - Dc1;
+    U = [Uw;Uv];
     if any(U <= 0)
         warning('Wrong initialization!!')
     end
-
-    for m = 1:M
-%         W(m) = gigrnd_ONE(1/2,1/s,abs(U(m)^2)/s);    
-        W(m) = 1/inverseGaussian(1/abs(U(m)), 1/s);
+    
+    for m = 1:M0
+%         W(m) = gigrnd_ONE(1/2,1/s^2,abs(Uw(m)^2)/s^2);
+        W(m) = 1/inverseGaussian(1/abs(Uw(m)), 1/s);
     end
     
+    for m = 1:M1
+        V(m,t) = p_W(Uv(m),s);
+    end
     %% Gibbs Sampler Loop
     while ~STOP
         t = t + 1;
-        for m = 1:M
+        for m = 1:M0
 %             W(m,t) = gigrnd_ONE(1/2,1/s,abs(U(m)^2)/s);
-            W(m) = 1/inverseGaussian(1/abs(U(m)), 1/s);
+            W(m) = 1/inverseGaussian(1/abs(Uw(m)), 1/s);
         end
     
-        nu = W + b;
-    	Omega = 1./(W);
-    
-        F = chol(Q + A*(Omega.*A')/s);
-    
-    	X(:,t) = F\(randn(N,1) + F'\A*(Omega.*nu)/s);
+        nuW = W + c0;
+    	OmegaW = 1./(W);
 
-        U = A'*X(:,t) - b;
+        for m = 1:M1
+            V(m) = p_W(Uv(m),sqrt(s));
+        end
+
+        nuV = V + Dc1;
+        OmegaV = (1./(V.*(1 - V)));
+
+
+        F = chol(Q + R0'*(OmegaW.*R0/s) + DR1'*(OmegaV.*DR1)/s);
+        X(:,t) = F\randn(N,1) + F\(F'\(R0'*(OmegaW.*nuW)/s + DR1'*(OmegaV.*nuV)/s));
+    
+        Uw = R0*X(:,t) - c0;
+        Uv = DR1*X(:,t) - Dc1;
+        
         if t > Tbin
-            if ~any(U <= 0) 
+            if ~any(abs(Uv-1/2) >= 1/2) && ~any(Uw <= 0)     
                 ind = [ind;t];
                 ACC = ACC + 1;
                 if ACC > Tc
@@ -77,7 +99,7 @@ function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
                 end
             end
         else
-            if ~any(U <= 0)
+            if ~any(abs(Uv-1/2) >= 1/2) && ~any(Uw <= 0)     
                 ACCPID = ACCPID + 1;
             end
             if mod(t,NPID) == 0

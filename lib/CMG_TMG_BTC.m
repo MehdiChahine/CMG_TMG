@@ -1,6 +1,6 @@
-function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
+function X = CMG_TMG_BTC(Q,mu,R,c,d,Tc,Tbin)
 %CMG_TMG_STC generates samples distributed according to a Truncated
-%Multivariate Gaussian (TMG) restricted by linear inqualities (c <= Rx) as defined in eq (1)
+%Multivariate Gaussian (TMG) restricted by linear inqualities (c <= Rx <= d) as defined in eq (1) 
 %of the paper "A Continuous Gaussian Mixture Approach to Sample
 %Multivariate Gaussians constrained by linear inequalities"
 
@@ -21,17 +21,21 @@ function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
     % Get size variables
     T = Tbin + Tc;
     [M,N] = size(R);
-
-    % Mean shift
+    
+    % Mean shift, get c tilde : 
     c = c -R*mu;
+    d = d - R*mu;
+
 
     % Compute A and b
-    A = R';
-    b = c;
+    Delta = diag(1./(d-c));
+
+    A = (Delta*R)';
+    b = Delta*c;
 
     % Intialize scale parameter s
     s = 1/N;
-    
+
     % Initialize variables
     W = zeros(M,1);
     X = zeros(N,T);
@@ -39,37 +43,38 @@ function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
     ind = [];
     NPID = 50;ACCPID = 0;
 
-    %% Gibbs Sampler Initialization
+
+   
+    %% Gibbs sampler
+    % Initialization
     X_ = (1/N)*ones(N,1)-1/N^2;
     X(:,1) = (X_ - mu);
     U = A'*X(:,1) - b;
-    if any(U <= 0)
+    if any(abs(U-1/2) >= 1/2)
         warning('Wrong initialization!!')
     end
 
     for m = 1:M
-%         W(m) = gigrnd_ONE(1/2,1/s,abs(U(m)^2)/s);    
-        W(m) = 1/inverseGaussian(1/abs(U(m)), 1/s);
+        W(m) = p_W(U(m),sqrt(s));
     end
     
-    %% Gibbs Sampler Loop
+    %% Loop
     while ~STOP
         t = t + 1;
+%         tStart = tic;
         for m = 1:M
-%             W(m,t) = gigrnd_ONE(1/2,1/s,abs(U(m)^2)/s);
-            W(m) = 1/inverseGaussian(1/abs(U(m)), 1/s);
+            W(m) = p_W(U(m),sqrt(s));
         end
     
         nu = W + b;
-    	Omega = 1./(W);
-    
+        Omega = (1./(W.*(1 - W)));
+        
         F = chol(Q + A*(Omega.*A')/s);
-    
     	X(:,t) = F\(randn(N,1) + F'\A*(Omega.*nu)/s);
-
+	
         U = A'*X(:,t) - b;
         if t > Tbin
-            if ~any(U <= 0) 
+            if ~any(abs(U-1/2) >= 1/2) 
                 ind = [ind;t];
                 ACC = ACC + 1;
                 if ACC > Tc
@@ -77,7 +82,7 @@ function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
                 end
             end
         else
-            if ~any(U <= 0)
+            if ~any(abs(U-1/2) >= 1/2) 
                 ACCPID = ACCPID + 1;
             end
             if mod(t,NPID) == 0
@@ -95,7 +100,8 @@ function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
                 s = max(1e-8,s + Kp * e_pid);
                 ACCPID = 0;
             end
-        end
+            
+	    end
         
         if ~mod(t,5000)
             fprintf('Iter N : %d || %d \n',t,ACC);
@@ -106,6 +112,3 @@ function X = CMG_TMG_STC(Q,mu,R,c,Tc,Tbin)
     
     % Transormation of X
     X = X + mu;
-
-
-
