@@ -5,7 +5,9 @@ This code is based on the worked introduced in the folowing paper:
 "A Continuous Gaussian Mixture Approach to Sample Multivariate Gaussians constrained by linear inequalities" by Mehdi AMROUCHE, Jérôme IDIER and Hervé CARFANTAN
 
 DOI: XXX
+
 Springer URL
+
 HAL URL
 
 Date of current version: July. 29,2025
