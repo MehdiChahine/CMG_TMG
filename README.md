@@ -4,11 +4,8 @@ This directory includes the Matlab functions implementing the Continuous Gaussia
 This code is based on the worked introduced in the folowing paper: 
 "A Continuous Gaussian Mixture Approach to Sample Multivariate Gaussians constrained by linear inequalities" by Mehdi AMROUCHE, Jérôme IDIER and Hervé CARFANTAN
 
-DOI: XXX
-
-Springer URL
-
-HAL URL
+DOI: hal-05195044
+URL: https://hal.science/hal-05195044
 
 Date of current version: July. 29,2025
 
@@ -17,7 +14,7 @@ Mehdi AMROUCHE, Jérôme IDIER, and Hervé CARFANTAN
 
 (a) Description: see above.
 
-(b) Platform: any platform on which Matlab is installed. No special toolbox is needed._
+(b) Platform: any platform on which Matlab is installed. No special toolbox is needed.
 
 (c) Environment: Matlab (version 8 or more recent versions).
 
