@@ -22,7 +22,7 @@ preferred-citation:
   type: article
   title: "A Continuous Gaussian Mixture Approach to Sample Multivariate Gaussians constrained by linear inequalities"
   authors:
-    - family-names: Amrouche
+  - family-names: Amrouche
     given-names: Mehdi
     affiliation: IRAP - Institut de recherche en astrophysique et planétologie 
   - family-names: Idier
