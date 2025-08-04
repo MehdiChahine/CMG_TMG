@@ -2,26 +2,38 @@ cff-version: 1.2.0
 message: "If you use this software, please cite the following paper:"
 title: "A Continuous Gaussian Mixture Approach to Sample Multivariate Gaussians constrained by linear inequalities"
 version: 1.0.0
-doi: TBD
+doi: hal-05195044
 date-released: 2025-07-29
 authors:
   - family-names: Amrouche
     given-names: Mehdi
-    orcid: https://orcid.org/0000-0002-XXXX-XXXX
-    affiliation: Private Research & Development Company
+    affiliation: IRAP - Institut de recherche en astrophysique et planétologie 
+  - family-names: Idier
+    given-names: Jérôme
+    affiliation: LS2N - Laboratoire des Sciences du Numérique de Nantes 
+  - family-names: Carfantan
+    given-names: Hervé
+    affiliation: IRAP - Institut de recherche en astrophysique et planétologie 
 license: MIT
-url: https://github.com/yourusername/MyAwesomeCode
-repository: https://github.com/yourusername/MyAwesomeCode
-repository-code: https://github.com/yourusername/MyAwesomeCode
+url: https://github.com/MehdiChahine/CMG_TMG
+repository: https://github.com/MehdiChahine/CMG_TMG
+repository-code: https://github.com/MehdiChahine/CMG_TMG
 preferred-citation:
   type: article
   title: "A Continuous Gaussian Mixture Approach to Sample Multivariate Gaussians constrained by linear inequalities"
   authors:
     - family-names: Amrouche
-      given-names: Mehdi
-  journal: "Journal of Computational Inverse Problems"
+    given-names: Mehdi
+    affiliation: IRAP - Institut de recherche en astrophysique et planétologie 
+  - family-names: Idier
+    given-names: Jérôme
+    affiliation: LS2N - Laboratoire des Sciences du Numérique de Nantes 
+  - family-names: Carfantan
+    given-names: Hervé
+    affiliation: IRAP - Institut de recherche en astrophysique et planétologie 
+  journal: ""
   year: 2025
-  volume: 42
-  issue: 3
-  pages: 123–145
-  doi: 10.1000/jcip.2025.007
+  volume: 
+  issue: 
+  pages:
+  doi: hal-05195044
